@@ -29,10 +29,18 @@ struct dma_memory {
 	uintptr_t phy;
 };
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct dma_memory memory_allocate_dma(size_t size);
 
 struct mempool* memory_allocate_mempool(uint32_t num_entries, uint32_t entry_size);
 struct pkt_buf* pkt_buf_alloc(struct mempool* mempool);
 void pkt_buf_free(struct pkt_buf* buf);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif //IXY_MEMORY_H

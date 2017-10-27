@@ -332,7 +332,7 @@ void ixgbe_read_stats(struct ixy_device* dev, struct device_stats* stats) {
 }
 
 // advance index with wrap-around, this line is the reason why we require a power of two for the queue size
-#define wrap_ring(index, ring_size) (uint16_t) ((index + 1) & (ring_size - 1))
+#define inc_and_wrap_ring(index, ring_size) (uint16_t) ((index + 1) & (ring_size - 1))
 
 
 // section 1.8.2 and 7.1
@@ -366,7 +366,7 @@ struct pkt_buf* ixgbe_rx_packet(struct ixy_device* dev, uint16_t queue_id) {
 		desc_ptr->read.pkt_addr = new_buf->buf_addr_phy + offsetof(struct pkt_buf, data);
 		desc_ptr->read.hdr_addr = 0; // this resets the flags
 		// want to read the next one next time
-		queue->rx_index = wrap_ring(rx_index, queue->num_entries);
+		queue->rx_index = inc_and_wrap_ring(rx_index, queue->num_entries);
 		// tell hardware that we are done
 		// this is intentionally off by one, otherwise we'd set RDT=RDH if we are receiving faster than packets
 		// coming in -- RDT=RDH means queue is full
@@ -402,7 +402,7 @@ uint16_t ixgbe_tx_packet(struct ixy_device* dev, uint16_t queue_id, struct pkt_b
 		if (status & IXGBE_ADVTXD_STAT_DD) {
 			struct pkt_buf* buf = queue->virtual_addresses[clean_index];
 			pkt_buf_free(buf);
-			clean_index = wrap_ring(clean_index, queue->num_entries);
+			clean_index = inc_and_wrap_ring(clean_index, queue->num_entries);
 		} else {
 			// reached an unsent descriptor, can't continue cleaning
 			break;
@@ -412,12 +412,12 @@ uint16_t ixgbe_tx_packet(struct ixy_device* dev, uint16_t queue_id, struct pkt_b
 
 	// step 2: send out our packet, if possible
 	// we are full if the next index is the one we are trying to reclaim
-	if (clean_index == wrap_ring(cur_index, queue->num_entries)) {
+	if (clean_index == inc_and_wrap_ring(cur_index, queue->num_entries)) {
 		return 0;
 	}
 	// remember virtual address to clean it up later
 	queue->virtual_addresses[cur_index] = (void*) buf;
-	queue->tx_index = wrap_ring(queue->tx_index, queue->num_entries );
+	queue->tx_index = inc_and_wrap_ring(queue->tx_index, queue->num_entries );
 	volatile union ixgbe_adv_tx_desc* txd = queue->descriptors + cur_index;
 	// NIC reads from here
 	txd->read.buffer_addr = buf->buf_addr_phy + offsetof(struct pkt_buf, data);
