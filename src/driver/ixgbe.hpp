@@ -4,7 +4,7 @@
 #include "device.hpp"
 #include "pci.h"
 #include "memory.h"
-#include "stats.h"
+#include "stats.hpp"
 
 namespace ixgbe_driver {
     constexpr int MAX_RX_QUEUE_ENTRIES = 4096;
@@ -28,7 +28,7 @@ public:
 
     uint16_t tx_packet(uint16_t queue_id, struct pkt_buf* buf);
 
-    void read_stats(struct device_stats* stats);
+    void do_read_stats(ixy::device_stats* stats);
 
 private:
     void init_link();

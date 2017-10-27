@@ -4,6 +4,10 @@
 #include <stdint.h>
 #include <unistd.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct pkt_buf {
 	// physical address to pass a buffer to a nic
 	uintptr_t buf_addr_phy;
@@ -29,9 +33,6 @@ struct dma_memory {
 	uintptr_t phy;
 };
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 struct dma_memory memory_allocate_dma(size_t size);
 

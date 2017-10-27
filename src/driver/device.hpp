@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <unistd.h>
+#include <stddef.h>
 
 #include "log.h"
 
@@ -20,8 +21,8 @@ protected:
 
 public:
     const char* driver_name = "";
-    const std::uint16_t num_rx_queues = 0;
-    const std::uint16_t num_tx_queues = 0;
+    std::uint16_t num_rx_queues;
+    std::uint16_t num_tx_queues;
     const char* pci_addr;
     std::uint8_t* addr;
     // allow drivers to keep some state for queues, opaque pointer cast by the driver
@@ -34,7 +35,7 @@ public:
     }
 
     void _set_promisc(bool enabled) {
-        return impl().do_set_promisc();
+        impl().do_set_promisc();
     }
 
     struct pkt_buf* _rx_packet(std::uint16_t queue_id) {
@@ -45,9 +46,9 @@ public:
         return impl().do_tx_packet(queue_id, buf);
     }
 
-    void _read_stats(struct device_stats* stats) {
-        return impl().do_read_stats(stats);
-    }
+    //void read_stats(ixy::device_stats<T>* stats) {
+    //    impl().do_read_stats(stats);
+    //}
 
     void set_reg32(int reg, std::uint32_t value) {
         __asm__ volatile ("" : : : "memory");

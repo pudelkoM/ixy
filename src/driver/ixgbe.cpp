@@ -158,7 +158,7 @@ uint16_t ixgbe::tx_packet(uint16_t queue_id, struct pkt_buf* buf) {
     return 1;
 }
 
-void ixgbe::read_stats(struct device_stats* stats) {
+void ixgbe::do_read_stats(ixy::device_stats* stats) {
     uint32_t rx_pkts = get_reg32(IXGBE_GPRC);
     uint32_t tx_pkts = get_reg32(IXGBE_GPTC);
     uint64_t rx_bytes = get_reg32(IXGBE_GORCL) + (((uint64_t) get_reg32(IXGBE_GORCH)) << 32);
@@ -206,7 +206,7 @@ void ixgbe::reset_and_init() {
 
     // section 4.6.5 - statistical counters
     // reset-on-read registers, just read them once
-    read_stats(NULL);
+    do_read_stats(NULL);
 
     // section 4.6.7 - init rx
     init_rx();
