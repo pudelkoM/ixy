@@ -1,6 +1,5 @@
-language: c
+language: cpp
 compiler:
-  - clang
   - gcc
 script:
   - mkdir ./build && cd ./build
@@ -18,3 +17,5 @@ matrix:
             - clang-4.0
       env:
         - MATRIX_EVAL="CC=clang-4.0 && CXX=clang++-4.0"
+before_install:
+    - eval "${MATRIX_EVAL}"
