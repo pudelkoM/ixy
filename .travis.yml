@@ -6,4 +6,15 @@ script:
   - mkdir ./build && cd ./build
   - cmake ..
   - make
-
+matrix:
+  include:
+    # works on Trusty
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - llvm-toolchain-trusty-4.0
+          packages:
+            - clang-4.0
+      env:
+        - MATRIX_EVAL="CC=clang-4.0 && CXX=clang++-4.0"
