@@ -1,14 +1,22 @@
 language: cpp
-compiler:
-  - clang
-  - gcc
+
 script:
   - mkdir ./build && cd ./build
   - cmake ..
   - make
+
 matrix:
   include:
     # works on Trusty
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-4.9
+      env:
+         - MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9"
     - os: linux
       addons:
         apt:
@@ -18,5 +26,6 @@ matrix:
             - clang-4.0
       env:
         - MATRIX_EVAL="CC=clang-4.0 && CXX=clang++-4.0"
+
 before_install:
     - eval "${MATRIX_EVAL}"
