@@ -4,9 +4,8 @@ project(ixy)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 14)
 
-add_compile_options(-g -O2 -march=native -fomit-frame-pointer -std=c11
-	-D_XOPEN_SOURCE=700
-	-D_BSD_SOURCE
+add_compile_options(-g -O2 -march=native -fomit-frame-pointer
+	-D_DEFAULT_SOURCE
 	-Wall
 	-Wextra
 	-Wno-unused-parameter
