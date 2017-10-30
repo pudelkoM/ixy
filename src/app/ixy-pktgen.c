@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <unistd.h>
+#include <libseccomp_init.h>
 
 #include "stats.h"
 #include "log.h"
@@ -43,6 +44,7 @@ int main(int argc, char* argv[]) {
 
 	uint64_t last_stats_printed = monotonic_time();
 	struct ixy_device* dev = ixgbe_init(argv[1], 1, 1);
+	setup_seccomp();
 	struct device_stats stats_old, stats;
 	stats_init(&stats, dev);
 	stats_init(&stats_old, dev);

@@ -5,6 +5,7 @@
 #include "log.h"
 #include "memory.h"
 #include "driver/ixgbe.h"
+#include "libseccomp_init.h"
 
 
 int main(int argc, char* argv[]) {
@@ -23,6 +24,7 @@ int main(int argc, char* argv[]) {
 		// this effectively turns this into an echo server
 		dev2 = dev1;
 	}
+	setup_seccomp();
 
 	uint64_t last_stats_printed = monotonic_time();
 	struct device_stats stats1, stats1_old;

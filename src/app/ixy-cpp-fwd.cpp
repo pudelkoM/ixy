@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <memory>
+#include <libseccomp_init.h>
 
 #include "stats.hpp"
 #include "driver/ixgbe.hpp"
@@ -21,6 +22,7 @@ int main(int argc, char* argv[]) {
         // this effectively turns this into an echo server
         dev2 = dev1;
     }
+    setup_seccomp();
 
 
     uint64_t last_stats_printed = ixy::monotonic_time();

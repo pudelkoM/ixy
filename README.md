@@ -46,11 +46,12 @@ TODO. For now: read the code, it has comments referring to relevant sections of 
 	* gcc >= 4.8
 	* make
 	* cmake
+	* libseccomp-dev
 	
 	Run this Debian/Ubuntu to install them:
 	
 	```
-	sudo apt-get install -y build-essential cmake
+	sudo apt-get install -y build-essential cmake libseccomp-dev
 	```
 2. Configure 2MB hugepages in /mnt/huge using our script:
 
