@@ -13,6 +13,8 @@ add_compile_options(-g -O2 -march=native -fomit-frame-pointer
 	-Wformat=2
 )
 
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -fsanitize=address -fno-omit-frame-pointer")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address -fno-omit-frame-pointer")
 
 include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/src

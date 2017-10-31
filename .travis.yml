@@ -2,8 +2,12 @@ language: cpp
 
 script:
   - mkdir ./build && cd ./build
-  - cmake ..
+  - cmake -DCMAKE_BUILD_TYPE="${BUILD_TYPE}" ..
   - make
+
+env:
+  - BUILD_TYPE=Release
+  - BUILD_TYPE=Debug
 
 matrix:
   include:
