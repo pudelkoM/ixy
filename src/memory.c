@@ -50,6 +50,9 @@ struct dma_memory memory_allocate_dma(size_t size) {
 	// don't keep it around in the hugetlbfs
 	close(fd);
 	unlink(path);
+	// touch page so it is not lazily allocated and virt_to_phys() can resolve its address
+	volatile uint8_t temp = ((volatile uint8_t*)virt_addr)[0];
+	((volatile uint8_t*)virt_addr)[0] = temp;
 	return (struct dma_memory) {
 		.virt = virt_addr,
 		.phy = virt_to_phys(virt_addr)
