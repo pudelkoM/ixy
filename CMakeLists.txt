@@ -4,7 +4,7 @@ project(ixy)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 14)
 
-add_compile_options(-g -O2 -march=native -fomit-frame-pointer
+add_compile_options(-O2 -march=native
 	-D_DEFAULT_SOURCE
 	-Wall
 	-Wextra
@@ -13,8 +13,11 @@ add_compile_options(-g -O2 -march=native -fomit-frame-pointer
 	-Wformat=2
 )
 
-set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -fsanitize=address -fno-omit-frame-pointer")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address -fno-omit-frame-pointer")
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -fomit-frame-pointer")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -fomit-frame-pointer")
+
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -fsanitize=address -fno-omit-frame-pointer")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -fsanitize=address -fno-omit-frame-pointer")
 
 include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/src
@@ -29,3 +32,4 @@ target_link_libraries(ixy-fwd "seccomp")
 add_executable(ixy-cpp-fwd src/app/ixy-cpp-fwd.cpp ${SOURCE_COMMON})
 target_link_libraries(ixy-cpp-fwd "seccomp")
 
+add_executable(allocator-example src/app/allocator-example.c src/allocator_zoo.c src/allocator_zoo.h)
