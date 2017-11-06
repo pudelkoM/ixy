@@ -126,6 +126,20 @@ void mallocator_free(struct allocator* a);
  */
 extern struct allocator mallocator_t;
 
+/**
+ *
+ * @return
+ */
+struct allocator* dma_allocator_new();
+
+/**
+ *
+ * @param a
+ */
+void dma_allocator_free(struct allocator* a);
+
+extern struct allocator dma_allocator_t;
+
 #ifdef __cplusplus
 }
 #endif

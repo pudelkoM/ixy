@@ -9,7 +9,6 @@ int main() {
     a = &mallocator_t;
 
     struct mem_blk blk = a->allocate(a, 1024);
-    printf("%p, %zu\n", blk.ptr, blk.size);
     a->deallocate(a, &blk);
 
     a = stack_allocator_new(1024, 64, &mallocator_t);
@@ -45,4 +44,15 @@ int main() {
         error("stack must own allocated block");
     a->deallocate(a, &blk);
     spinlock_stack_allocator_free(a);
+
+    a = &dma_allocator_t;
+    blk = a->allocate(a, 4096);
+    printf("%p, %zu\n", blk.ptr, blk.size);
+    a->deallocate(a, &blk);
+    blk = a->allocate(a, 4 * 1024 * 1024);
+    printf("%p, %zu\n", blk.ptr, blk.size);
+    a->deallocate(a, &blk);
+    blk = a->allocate(a, 8 * 1024 * 1024);
+    printf("%p, %zu\n", blk.ptr, blk.size);
+    a->deallocate(a, &blk);
 }

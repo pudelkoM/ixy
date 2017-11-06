@@ -34,7 +34,8 @@ set(SOURCE_ALLOCATOR
 		src/allocator/null_allocator.c
 		src/allocator/spinlock_stack_allocator.c
 		src/allocator/rte_spinlock.h
-		src/allocator/rte_per_lcore.h)
+		src/allocator/rte_per_lcore.h
+		src/allocator/dma_allocator.c)
 
 add_executable(ixy-pktgen src/app/ixy-pktgen.c ${SOURCE_COMMON})
 target_link_libraries(ixy-pktgen "seccomp")
