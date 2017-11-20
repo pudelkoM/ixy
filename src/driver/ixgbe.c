@@ -189,8 +189,10 @@ static void init_tx(struct ixy_device* dev) {
 		// descriptor writeback magic values, defaults from DPDK
 		// no fancy prefetching, it's also disabled by default in DPDK
 		uint32_t txdctl = get_reg32(dev, IXGBE_TXDCTL(i));
-		txdctl &= ~(0x3F);
-		txdctl |= 32;
+		// Values taken from DPDK apps
+		txdctl |= 36 & 0x7F;           // PTHRESH
+		txdctl |= ((8 & 0x7F) << 8);   // HTHRESH
+		txdctl |= ((4 & 0x7F) << 16);  // WTHRESH
 		set_reg32(dev, IXGBE_TXDCTL(i), txdctl);
 
 		// private data for the driver, 0-initialized
