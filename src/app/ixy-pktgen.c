@@ -5,6 +5,7 @@
 #include "log.h"
 #include "memory.h"
 #include "driver/device.h"
+#include "setup_seccomp.h"
 
 // number of packets sent simultaneously to our driver
 static const uint32_t BATCH_SIZE = 64;
@@ -80,6 +81,7 @@ int main(int argc, char* argv[]) {
 	stats_init(&stats, dev);
 	stats_init(&stats_old, dev);
 	uint32_t seq_num = 0;
+	setup_seccomp();
 
 	// array of bufs sent out in a batch
 	struct pkt_buf* bufs[BATCH_SIZE];

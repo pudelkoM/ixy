@@ -51,11 +51,12 @@ We currently have a simple check if the device is actually a NIC, but trying to 
 	* gcc >= 4.8
 	* make
 	* cmake
+	* libseccomp-dev
 	
 	Run this on Debian/Ubuntu to install them:
 	
 	```
-	sudo apt-get install -y build-essential cmake
+	sudo apt-get install -y build-essential cmake libseccomp-dev
 	```
 2. Configure 2MB hugepages in /mnt/huge using our script:
 

@@ -21,4 +21,6 @@ include_directories(
 set(SOURCE_COMMON src/pci.c src/memory.c src/stats.c src/driver/device.c src/driver/ixgbe.c src/driver/virtio.c)
 
 add_executable(ixy-pktgen src/app/ixy-pktgen.c ${SOURCE_COMMON})
+target_link_libraries(ixy-pktgen seccomp)
 add_executable(ixy-fwd src/app/ixy-fwd.c ${SOURCE_COMMON})
+target_link_libraries(ixy-fwd seccomp)

@@ -5,6 +5,7 @@
 #include "log.h"
 #include "memory.h"
 #include "driver/device.h"
+#include "setup_seccomp.h"
 
 const int BATCH_SIZE = 32;
 
@@ -42,6 +43,7 @@ int main(int argc, char* argv[]) {
 	stats_init(&stats1_old, dev1);
 	stats_init(&stats2, dev2);
 	stats_init(&stats2_old, dev2);
+	setup_seccomp();
 
 	uint64_t counter = 0;
 	while (true) {
