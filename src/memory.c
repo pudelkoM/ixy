@@ -26,27 +26,35 @@ static uintptr_t virt_to_phys(void* virt) {
 }
 
 static bool is_continuous(void* virt, size_t size) {
-    long page_size = sysconf(_SC_PAGESIZE);
-    uintptr_t virt_base = (uintptr_t) virt;
-    if (virt_base % (unsigned long) page_size)
-        error("memory block does not start at page boundary");
-    uintptr_t phys_base = virt_to_phys(virt);
-    for (uintptr_t i = virt_base; i < virt_base + size; i += page_size) {
-        uintptr_t phys = virt_to_phys((void*) i);
-        intptr_t virt_diff = i - virt_base;
-        intptr_t phys_diff = phys - phys_base;
-        if (phys_diff != virt_diff) {
-            return false;
-        }
-    }
-    return true;
+	long page_size = sysconf(_SC_PAGESIZE);
+	uintptr_t virt_base = (uintptr_t) virt;
+	if (virt_base % (unsigned long) page_size)
+		error("memory block does not start at page boundary");
+	uintptr_t phys_base = virt_to_phys(virt);
+	for (uintptr_t i = virt_base; i < virt_base + size; i += page_size) {
+		uintptr_t phys = virt_to_phys((void*) i);
+		intptr_t virt_diff = i - virt_base;
+		intptr_t phys_diff = phys - phys_base;
+		if (phys_diff != virt_diff) {
+			return false;
+		}
+	}
+	return true;
 }
 
 // Allocate memory suitable for DMA access in contiguous pages by requesting
 // many pages at once and the remapping suitable ones
 struct dma_memory memory_allocate_dma(size_t size, bool require_contiguous) {
+	if (!require_contiguous) {
+		void* mem = (void*) check_err(mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS , -1, 0), "mmap non-contiguous");
+		check_err(mlock(mem, size), "mlock");
+		return (struct dma_memory) {
+			.virt = mem,
+			.phy = virt_to_phys(mem)
+		};
+	}
 	long page_size = sysconf(_SC_PAGESIZE);
-	const size_t num_pages = 1024;
+	const size_t num_pages = 1024 * 10;
 	const size_t pool_size = num_pages * page_size;
 	struct entry {
 		void* virt;
